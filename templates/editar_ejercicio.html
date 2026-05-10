@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Ejercicio</title>
+</head>
+<body>
+
+    <h2>Editar Ejercicio</h2>
+
+    {% if error %}
+        <p style="color:red;">{{ error }}</p>
+    {% endif %}
+
+    <form method="POST">
+        <label>Nombre:</label><br>
+        <input type="text" name="nombre" value="{{ ejercicio.nombre }}" required><br><br>
+
+        <label>Tipo:</label><br>
+        <select name="tipo" required>
+            <option value="Cardio" {% if ejercicio.tipo == "Cardio" %}selected{% endif %}>Cardio</option>
+            <option value="Fuerza" {% if ejercicio.tipo == "Fuerza" %}selected{% endif %}>Fuerza</option>
+            <option value="Resistencia" {% if ejercicio.tipo == "Resistencia" %}selected{% endif %}>Resistencia</option>
+            <option value="Flexibilidad" {% if ejercicio.tipo == "Flexibilidad" %}selected{% endif %}>Flexibilidad</option>
+        </select><br><br>
+
+        <label>Calorías quemadas estimadas:</label><br>
+        <input type="number" name="calorias" value="{{ ejercicio.calorias }}" required><br><br>
+
+        <button type="submit">Actualizar</button>
+    </form>
+
+    <br>
+    <a href="{{ url_for('ejercicio.listar_ejercicios') }}">Volver</a>
+
+</body>
+</html>
