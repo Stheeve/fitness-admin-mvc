@@ -10,7 +10,7 @@
     <p>Bienvenido, {{ session["username"] }}</p>
 
     <ul>
-        <li><a href="#">Administrar rutinas</a></li>
+        <li><a href="{{ url_for('rutina.listar_rutinas') }}">Administrar rutinas</a></li>
         <li><a href="#">Administrar ejercicios</a></li>
         <li><a href="#">Asignar ejercicios a rutinas</a></li>
     </ul>

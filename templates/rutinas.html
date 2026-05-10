@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Rutinas</title>
+</head>
+<body>
+
+    <h2>Administrar Rutinas</h2>
+
+    <a href="{{ url_for('dashboard') }}">Volver al dashboard</a> |
+    <a href="{{ url_for('rutina.crear') }}">Crear nueva rutina</a> |
+    <a href="{{ url_for('auth.logout') }}">Cerrar sesión</a>
+
+    <hr>
+
+    {% if rutinas|length == 0 %}
+        <p>No existen rutinas registradas.</p>
+    {% else %}
+        <table border="1" cellpadding="8">
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Nivel</th>
+                <th>Objetivo</th>
+                <th>Acciones</th>
+            </tr>
+
+            {% for rutina in rutinas %}
+            <tr>
+                <td>{{ rutina.id }}</td>
+                <td>{{ rutina.nombre }}</td>
+                <td>{{ rutina.descripcion }}</td>
+                <td>{{ rutina.nivel }}</td>
+                <td>{{ rutina.objetivo }}</td>
+                <td>
+                    <a href="{{ url_for('rutina.editar', id=rutina.id) }}">Editar</a>
+                    |
+                    <a href="{{ url_for('rutina.eliminar', id=rutina.id) }}"
+                       onclick="return confirm('¿Seguro que deseas eliminar esta rutina?')">
+                       Eliminar
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+
+</body>
+</html>
