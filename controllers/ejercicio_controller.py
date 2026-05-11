@@ -31,7 +31,13 @@ def crear():
     if request.method == "POST":
         nombre = request.form["nombre"]
         tipo = request.form["tipo"]
-        calorias = int(request.form["calorias"])
+        try:
+            calorias = int(request.form["calorias"])
+        except ValueError:
+            return render_template(
+                "crear_ejercicio.html",
+                error="Las calorías deben ser un número válido"
+        )
 
         # Validaciones Back-End
         if len(nombre.strip()) < 3:
@@ -62,7 +68,14 @@ def editar(id):
     if request.method == "POST":
         nombre = request.form["nombre"]
         tipo = request.form["tipo"]
-        calorias = int(request.form["calorias"])
+        try:
+            calorias = int(request.form["calorias"])
+        except ValueError:
+            return render_template(
+                "editar_ejercicio.html",
+                ejercicio=ejercicio,
+                error="Las calorías deben ser un número válido"
+            )
 
         # Validaciones Back-End
         if len(nombre.strip()) < 3:

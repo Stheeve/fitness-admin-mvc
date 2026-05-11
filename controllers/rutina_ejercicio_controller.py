@@ -34,9 +34,16 @@ def crear():
     if request.method == "POST":
         rutina_id = request.form["rutina_id"]
         ejercicio_id = request.form["ejercicio_id"]
-        series = int(request.form["series"])
-        repeticiones = int(request.form["repeticiones"])
-
+        try:
+            series = int(request.form["series"])
+            repeticiones = int(request.form["repeticiones"])
+        except ValueError:
+            return render_template(
+                "crear_asignacion.html",
+                rutinas=rutinas,
+                ejercicios=ejercicios,
+                error="Las series y repeticiones deben ser números válidos"
+            )
         # Validaciones Back-End importantes para el core
         if not rutina_id or not ejercicio_id:
             return render_template(
