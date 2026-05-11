@@ -138,3 +138,9 @@ Rutas principales
 ## Autor
 
 Stheeven Quishpe
+
+## Deploy
+
+La aplicación se encuentra disponible en:
+
+fitness-admin-mvc-production.up.railway.app
