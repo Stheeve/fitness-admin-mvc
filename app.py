@@ -2,6 +2,7 @@ from flask import Flask, render_template, session, redirect, url_for
 from controllers.auth_controller import auth_bp
 from controllers.rutina_controller import rutina_bp
 from controllers.ejercicio_controller import ejercicio_bp
+from controllers.rutina_ejercicio_controller import rutina_ejercicio_bp
 
 app = Flask(__name__)
 app.secret_key = "clave_secreta_fitness"
@@ -9,6 +10,7 @@ app.secret_key = "clave_secreta_fitness"
 app.register_blueprint(auth_bp)
 app.register_blueprint(rutina_bp)
 app.register_blueprint(ejercicio_bp)
+app.register_blueprint(rutina_ejercicio_bp)
 
 
 @app.route("/dashboard")

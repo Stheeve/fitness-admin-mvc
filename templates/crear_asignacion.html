@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Crear Asignación</title>
+</head>
+<body>
+
+    <h2>Crear Asignación Rutina - Ejercicio</h2>
+
+    {% if error %}
+        <p style="color:red;">{{ error }}</p>
+    {% endif %}
+
+    <form method="POST">
+
+        <label>Rutina:</label><br>
+        <select name="rutina_id" required>
+            <option value="">Seleccione una rutina</option>
+
+            {% for rutina in rutinas %}
+                <option value="{{ rutina.id }}">
+                    {{ rutina.nombre }} - {{ rutina.nivel }} - {{ rutina.objetivo }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <br><br>
+
+        <label>Ejercicio:</label><br>
+        <select name="ejercicio_id" required>
+            <option value="">Seleccione un ejercicio</option>
+
+            {% for ejercicio in ejercicios %}
+                <option value="{{ ejercicio.id }}">
+                    {{ ejercicio.nombre }} - {{ ejercicio.tipo }} - {{ ejercicio.calorias }} cal
+                </option>
+            {% endfor %}
+        </select>
+
+        <br><br>
+
+        <label>Series:</label><br>
+        <input type="number" name="series" required>
+
+        <br><br>
+
+        <label>Repeticiones:</label><br>
+        <input type="number" name="repeticiones" required>
+
+        <br><br>
+
+        <button type="submit">Guardar asignación</button>
+    </form>
+
+    <br>
+    <a href="{{ url_for('rutina_ejercicio.listar_asignaciones') }}">Volver</a>
+
+</body>
+</html>

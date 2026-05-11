@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Asignaciones</title>
+</head>
+<body>
+
+    <h2>Asignar Ejercicios a Rutinas</h2>
+
+    <a href="{{ url_for('dashboard') }}">Volver al dashboard</a> |
+    <a href="{{ url_for('rutina_ejercicio.crear') }}">Nueva asignación</a> |
+    <a href="{{ url_for('auth.logout') }}">Cerrar sesión</a>
+
+    <hr>
+
+    {% if asignaciones|length == 0 %}
+        <p>No existen asignaciones registradas.</p>
+    {% else %}
+        <table border="1" cellpadding="8">
+            <tr>
+                <th>ID</th>
+                <th>Rutina</th>
+                <th>Ejercicio</th>
+                <th>Series</th>
+                <th>Repeticiones</th>
+                <th>Acciones</th>
+            </tr>
+
+            {% for asignacion in asignaciones %}
+            <tr>
+                <td>{{ asignacion.id }}</td>
+                <td>{{ asignacion.rutina }}</td>
+                <td>{{ asignacion.ejercicio }}</td>
+                <td>{{ asignacion.series }}</td>
+                <td>{{ asignacion.repeticiones }}</td>
+                <td>
+                    <a href="{{ url_for('rutina_ejercicio.eliminar', id=asignacion.id) }}"
+                       onclick="return confirm('¿Seguro que deseas eliminar esta asignación?')">
+                       Eliminar
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+
+</body>
+</html>
