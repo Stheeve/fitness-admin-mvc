@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Comidas</title>
+</head>
+<body>
+
+    <h2>Administrar Comidas</h2>
+
+    <a href="{{ url_for('dashboard') }}">Volver al dashboard</a> |
+    <a href="{{ url_for('comida.crear') }}">Crear nueva comida</a> |
+    <a href="{{ url_for('auth.logout') }}">Cerrar sesión</a>
+
+    <hr>
+
+    {% if comidas|length == 0 %}
+        <p>No existen comidas registradas.</p>
+    {% else %}
+        <table border="1" cellpadding="8">
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Tipo</th>
+                <th>Calorías</th>
+                <th>Proteínas</th>
+                <th>Carbohidratos</th>
+                <th>Grasas</th>
+                <th>Acciones</th>
+            </tr>
+
+            {% for comida in comidas %}
+            <tr>
+                <td>{{ comida.id }}</td>
+                <td>{{ comida.nombre }}</td>
+                <td>{{ comida.tipo }}</td>
+                <td>{{ comida.calorias }}</td>
+                <td>{{ comida.proteinas }}</td>
+                <td>{{ comida.carbohidratos }}</td>
+                <td>{{ comida.grasas }}</td>
+                <td>
+                    <a href="{{ url_for('comida.editar', id=comida.id) }}">Editar</a>
+                    |
+                    <a href="{{ url_for('comida.eliminar', id=comida.id) }}"
+                       onclick="return confirm('¿Seguro que deseas eliminar esta comida?')">
+                       Eliminar
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+
+</body>
+</html>
