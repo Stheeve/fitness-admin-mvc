@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mis progresos</title>
+</head>
+<body>
+
+    <h2>Historial de Progreso</h2>
+
+    <a href="{{ url_for('dashboard') }}">Volver al dashboard</a> |
+    <a href="{{ url_for('progreso.crear') }}">Registrar progreso</a> |
+    <a href="{{ url_for('auth.logout') }}">Cerrar sesión</a>
+
+    <hr>
+
+    {% if progresos|length == 0 %}
+        <p>No existen registros de progreso.</p>
+    {% else %}
+        <table border="1" cellpadding="8">
+            <tr>
+                <th>ID</th>
+                <th>Fecha</th>
+                <th>Peso actual</th>
+                <th>% Grasa</th>
+                <th>Observación</th>
+                <th>Acciones</th>
+            </tr>
+
+            {% for progreso in progresos %}
+            <tr>
+                <td>{{ progreso.id }}</td>
+                <td>{{ progreso.fecha }}</td>
+                <td>{{ progreso.peso_actual }} kg</td>
+                <td>{{ progreso.porcentaje_grasa }}%</td>
+                <td>{{ progreso.observacion }}</td>
+                <td>
+                    <a href="{{ url_for('progreso.eliminar', id=progreso.id) }}"
+                       onclick="return confirm('¿Seguro que deseas eliminar este progreso?')">
+                       Eliminar
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+
+</body>
+</html>
