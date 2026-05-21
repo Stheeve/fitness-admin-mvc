@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mis comidas</title>
+</head>
+<body>
+
+    <h2>Mis Comidas Consumidas</h2>
+
+    <a href="{{ url_for('dashboard') }}">Volver al dashboard</a> |
+    <a href="{{ url_for('registro_comida.crear') }}">Registrar comida consumida</a> |
+    <a href="{{ url_for('auth.logout') }}">Cerrar sesión</a>
+
+    <hr>
+
+    {% if registros|length == 0 %}
+        <p>No existen comidas registradas.</p>
+    {% else %}
+        <table border="1" cellpadding="8">
+            <tr>
+                <th>ID</th>
+                <th>Fecha</th>
+                <th>Comida</th>
+                <th>Tipo</th>
+                <th>Calorías base</th>
+                <th>Cantidad</th>
+                <th>Calorías totales</th>
+                <th>Acciones</th>
+            </tr>
+
+            {% for registro in registros %}
+            <tr>
+                <td>{{ registro.id }}</td>
+                <td>{{ registro.fecha }}</td>
+                <td>{{ registro.comida }}</td>
+                <td>{{ registro.tipo }}</td>
+                <td>{{ registro.calorias }}</td>
+                <td>{{ registro.cantidad }}</td>
+                <td>{{ registro.calorias_totales }}</td>
+                <td>
+                    <a href="{{ url_for('registro_comida.eliminar', id=registro.id) }}"
+                       onclick="return confirm('¿Seguro que deseas eliminar este registro?')">
+                       Eliminar
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+
+</body>
+</html>

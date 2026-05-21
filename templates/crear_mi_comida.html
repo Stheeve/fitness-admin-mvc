@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrar comida consumida</title>
+</head>
+<body>
+
+    <h2>Registrar Comida Consumida</h2>
+
+    {% if error %}
+        <p style="color:red;">{{ error }}</p>
+    {% endif %}
+
+    <form method="POST">
+
+        <label>Fecha:</label><br>
+        <input type="date" name="fecha" required>
+        <br><br>
+
+        <label>Comida:</label><br>
+        <select name="comida_id" required>
+            <option value="">Seleccione una comida</option>
+            {% for comida in comidas %}
+                <option value="{{ comida.id }}">
+                    {{ comida.nombre }} - {{ comida.tipo }} - {{ comida.calorias }} kcal
+                </option>
+            {% endfor %}
+        </select>
+        <br><br>
+
+        <label>Cantidad:</label><br>
+        <input type="number" step="0.1" name="cantidad" required>
+        <br><br>
+
+        <button type="submit">Guardar registro</button>
+
+    </form>
+
+    <br>
+    <a href="{{ url_for('registro_comida.listar') }}">Volver</a>
+
+</body>
+</html>

@@ -6,6 +6,7 @@ from controllers.rutina_ejercicio_controller import rutina_ejercicio_bp
 from controllers.comida_controller import comida_bp
 from controllers.perfil_controller import perfil_bp
 from controllers.progreso_controller import progreso_bp
+from controllers.registro_comida_controller import registro_comida_bp
 
 app = Flask(__name__)
 app.secret_key = "clave_secreta_fitness"
@@ -17,6 +18,7 @@ app.register_blueprint(rutina_ejercicio_bp)
 app.register_blueprint(comida_bp)
 app.register_blueprint(perfil_bp)
 app.register_blueprint(progreso_bp)
+app.register_blueprint(registro_comida_bp)
 
 
 @app.route("/dashboard")
