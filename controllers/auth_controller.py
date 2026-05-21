@@ -15,6 +15,7 @@ def login():
         if usuario:
             session["usuario_id"] = usuario["id"]
             session["username"] = usuario["username"]
+            session["rol"] = usuario["rol"]
             return redirect(url_for("dashboard"))
 
         return render_template("login.html", error="Usuario o contraseña incorrectos")

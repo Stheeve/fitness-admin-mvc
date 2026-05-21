@@ -6,6 +6,7 @@ from models.comida_model import (
     actualizar_comida,
     eliminar_comida
 )
+from controllers.security import admin_required
 
 comida_bp = Blueprint("comida", __name__)
 
@@ -35,8 +36,9 @@ def validar_datos_comida(nombre, calorias, proteinas, carbohidratos, grasas):
 
 @comida_bp.route("/comidas")
 def listar_comidas():
-    if not login_required():
-        return redirect(url_for("auth.login"))
+    proteccion = admin_required()
+    if proteccion:
+        return proteccion
 
     comidas = obtener_comidas()
     return render_template("comidas.html", comidas=comidas)
@@ -44,8 +46,9 @@ def listar_comidas():
 
 @comida_bp.route("/comidas/crear", methods=["GET", "POST"])
 def crear():
-    if not login_required():
-        return redirect(url_for("auth.login"))
+    proteccion = admin_required()
+    if proteccion:
+        return proteccion
 
     if request.method == "POST":
         nombre = request.form["nombre"]
@@ -75,8 +78,9 @@ def crear():
 
 @comida_bp.route("/comidas/editar/<int:id>", methods=["GET", "POST"])
 def editar(id):
-    if not login_required():
-        return redirect(url_for("auth.login"))
+    proteccion = admin_required()
+    if proteccion:
+        return proteccion
 
     comida = obtener_comida_por_id(id)
 
@@ -109,8 +113,9 @@ def editar(id):
 
 @comida_bp.route("/comidas/eliminar/<int:id>")
 def eliminar(id):
-    if not login_required():
-        return redirect(url_for("auth.login"))
+    proteccion = admin_required()
+    if proteccion:
+        return proteccion
 
     eliminar_comida(id)
     return redirect(url_for("comida.listar_comidas"))

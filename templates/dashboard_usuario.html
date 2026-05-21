@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel del Usuario</title>
+</head>
+<body>
+
+    <h2>Panel del Usuario</h2>
+
+    <p>Bienvenido, {{ session["username"] }}</p>
+
+    <ul>
+        <li><a href="{{ url_for('perfil.perfil') }}">Mi perfil físico</a></li>
+        <li><a href="{{ url_for('progreso.listar_progresos') }}">Mi progreso</a></li>
+        <li><a href="{{ url_for('registro_comida.listar') }}">Mis comidas consumidas</a></li>
+    </ul>
+
+    <a href="{{ url_for('auth.logout') }}">Cerrar sesión</a>
+
+</body>
+</html>

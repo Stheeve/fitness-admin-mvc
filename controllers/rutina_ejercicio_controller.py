@@ -6,6 +6,7 @@ from models.rutina_ejercicio_model import (
 )
 from models.rutina_model import obtener_rutinas
 from models.ejercicio_model import obtener_ejercicios
+from controllers.security import admin_required
 
 rutina_ejercicio_bp = Blueprint("rutina_ejercicio", __name__)
 
@@ -16,8 +17,9 @@ def login_required():
 
 @rutina_ejercicio_bp.route("/asignaciones")
 def listar_asignaciones():
-    if not login_required():
-        return redirect(url_for("auth.login"))
+    proteccion = admin_required()
+    if proteccion:
+        return proteccion
 
     asignaciones = obtener_asignaciones()
     return render_template("asignaciones.html", asignaciones=asignaciones)
@@ -25,8 +27,9 @@ def listar_asignaciones():
 
 @rutina_ejercicio_bp.route("/asignaciones/crear", methods=["GET", "POST"])
 def crear():
-    if not login_required():
-        return redirect(url_for("auth.login"))
+    proteccion = admin_required()
+    if proteccion:
+        return proteccion
 
     rutinas = obtener_rutinas()
     ejercicios = obtener_ejercicios()
@@ -81,8 +84,9 @@ def crear():
 
 @rutina_ejercicio_bp.route("/asignaciones/eliminar/<int:id>")
 def eliminar(id):
-    if not login_required():
-        return redirect(url_for("auth.login"))
+    proteccion = admin_required()
+    if proteccion:
+        return proteccion
 
     eliminar_asignacion(id)
     return redirect(url_for("rutina_ejercicio.listar_asignaciones"))

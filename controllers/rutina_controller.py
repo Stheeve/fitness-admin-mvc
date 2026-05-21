@@ -6,6 +6,7 @@ from models.rutina_model import (
     actualizar_rutina,
     eliminar_rutina
 )
+from controllers.security import admin_required
 
 rutina_bp = Blueprint("rutina", __name__)
 
@@ -16,17 +17,19 @@ def login_required():
 
 @rutina_bp.route("/rutinas")
 def listar_rutinas():
-    if not login_required():
-        return redirect(url_for("auth.login"))
+    proteccion = admin_required()
+    if proteccion:
+        return proteccion
 
     rutinas = obtener_rutinas()
     return render_template("rutinas.html", rutinas=rutinas)
 
-
+    
 @rutina_bp.route("/rutinas/crear", methods=["GET", "POST"])
 def crear():
-    if not login_required():
-        return redirect(url_for("auth.login"))
+    proteccion = admin_required()
+    if proteccion:
+        return proteccion
 
     if request.method == "POST":
         nombre = request.form["nombre"]
@@ -49,8 +52,9 @@ def crear():
 
 @rutina_bp.route("/rutinas/editar/<int:id>", methods=["GET", "POST"])
 def editar(id):
-    if not login_required():
-        return redirect(url_for("auth.login"))
+    proteccion = admin_required()
+    if proteccion:
+        return proteccion
 
     rutina = obtener_rutina_por_id(id)
 
@@ -75,8 +79,9 @@ def editar(id):
 
 @rutina_bp.route("/rutinas/eliminar/<int:id>")
 def eliminar(id):
-    if not login_required():
-        return redirect(url_for("auth.login"))
+    proteccion = admin_required()
+    if proteccion:
+        return proteccion
 
     eliminar_rutina(id)
     return redirect(url_for("rutina.listar_rutinas"))

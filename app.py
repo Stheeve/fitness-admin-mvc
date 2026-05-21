@@ -20,14 +20,14 @@ app.register_blueprint(perfil_bp)
 app.register_blueprint(progreso_bp)
 app.register_blueprint(registro_comida_bp)
 
-
 @app.route("/dashboard")
 def dashboard():
     if "usuario_id" not in session:
         return redirect(url_for("auth.login"))
 
-    return render_template("dashboard.html")
+    if session.get("rol") == "admin":
+        return render_template("dashboard_admin.html")
 
-
+    return render_template("dashboard_usuario.html")
 if __name__ == "__main__":
     app.run(debug=True)

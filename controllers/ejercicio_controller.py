@@ -6,6 +6,7 @@ from models.ejercicio_model import (
     actualizar_ejercicio,
     eliminar_ejercicio
 )
+from controllers.security import admin_required
 
 ejercicio_bp = Blueprint("ejercicio", __name__)
 
@@ -16,8 +17,9 @@ def login_required():
 
 @ejercicio_bp.route("/ejercicios")
 def listar_ejercicios():
-    if not login_required():
-        return redirect(url_for("auth.login"))
+    proteccion = admin_required()
+    if proteccion:
+        return proteccion
 
     ejercicios = obtener_ejercicios()
     return render_template("ejercicios.html", ejercicios=ejercicios)
@@ -25,8 +27,9 @@ def listar_ejercicios():
 
 @ejercicio_bp.route("/ejercicios/crear", methods=["GET", "POST"])
 def crear():
-    if not login_required():
-        return redirect(url_for("auth.login"))
+    proteccion = admin_required()
+    if proteccion:
+        return proteccion
 
     if request.method == "POST":
         nombre = request.form["nombre"]
@@ -60,8 +63,9 @@ def crear():
 
 @ejercicio_bp.route("/ejercicios/editar/<int:id>", methods=["GET", "POST"])
 def editar(id):
-    if not login_required():
-        return redirect(url_for("auth.login"))
+    proteccion = admin_required()
+    if proteccion:
+        return proteccion
 
     ejercicio = obtener_ejercicio_por_id(id)
 
@@ -100,8 +104,9 @@ def editar(id):
 
 @ejercicio_bp.route("/ejercicios/eliminar/<int:id>")
 def eliminar(id):
-    if not login_required():
-        return redirect(url_for("auth.login"))
+    proteccion = admin_required()
+    if proteccion:
+        return proteccion
 
     eliminar_ejercicio(id)
     return redirect(url_for("ejercicio.listar_ejercicios"))

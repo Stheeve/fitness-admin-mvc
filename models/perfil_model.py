@@ -3,10 +3,10 @@ from config.db import get_db
 
 def obtener_perfil_por_usuario(usuario_id):
     conn = get_db()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor(dictionary=True, buffered=True)
 
     cursor.execute(
-        "SELECT * FROM perfil_usuario WHERE usuario_id = %s",
+        "SELECT * FROM perfil_usuario WHERE usuario_id = %s LIMIT 1",
         (usuario_id,)
     )
 

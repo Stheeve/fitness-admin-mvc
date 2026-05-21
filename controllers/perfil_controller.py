@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session
 from models.perfil_model import ( obtener_perfil_por_usuario, crear_perfil, actualizar_perfil)
-
+from controllers.security import usuario_required
 
 perfil_bp = Blueprint("perfil", __name__)
 
@@ -24,8 +24,9 @@ def validar_perfil(edad, peso, altura):
 
 @perfil_bp.route("/perfil", methods=["GET", "POST"])
 def perfil():
-    if not login_required():
-        return redirect(url_for("auth.login"))
+    proteccion = usuario_required()
+    if proteccion:
+        return proteccion
 
     usuario_id = session["usuario_id"]
     perfil_existente = obtener_perfil_por_usuario(usuario_id)

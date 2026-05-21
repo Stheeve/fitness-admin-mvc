@@ -5,6 +5,7 @@ from models.registro_comida_model import (
     eliminar_registro_comida
 )
 from models.comida_model import obtener_comidas, obtener_comida_por_id
+from controllers.security import usuario_required
 
 registro_comida_bp = Blueprint("registro_comida", __name__)
 
