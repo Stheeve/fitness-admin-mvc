@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Análisis de usuarios similares</title>
+</head>
+<body>
+
+    <h2>Análisis de Usuarios Similares</h2>
+
+    <a href="{{ url_for('dashboard') }}">Volver al dashboard</a> |
+    <a href="{{ url_for('auth.logout') }}">Cerrar sesión</a>
+
+    <hr>
+
+    {% if error %}
+        <p style="color:red;">{{ error }}</p>
+    {% else %}
+
+        <h3>Perfil analizado</h3>
+
+        <p><strong>Usuario:</strong> {{ perfil_actual.username }}</p>
+        <p><strong>Edad:</strong> {{ perfil_actual.edad }}</p>
+        <p><strong>Peso:</strong> {{ perfil_actual.peso }} kg</p>
+        <p><strong>Altura:</strong> {{ perfil_actual.altura }} cm</p>
+        <p><strong>Contextura:</strong> {{ perfil_actual.contextura }}</p>
+        <p><strong>Nivel de actividad:</strong> {{ perfil_actual.nivel_actividad }}</p>
+        <p><strong>Objetivo:</strong> {{ perfil_actual.objetivo }}</p>
+
+        <hr>
+
+        <h3>Resultados generales</h3>
+
+        <p><strong>Usuarios similares encontrados:</strong> {{ total_similares }}</p>
+        <p><strong>Casos exitosos encontrados:</strong> {{ total_exitosos }}</p>
+        <p><strong>Promedio de cambio de peso en casos exitosos:</strong> {{ promedio_cambio }} kg</p>
+
+        <hr>
+
+        <h3>Usuarios similares</h3>
+
+        {% if usuarios_similares|length == 0 %}
+            <p>No se encontraron usuarios similares.</p>
+        {% else %}
+            <table border="1" cellpadding="8">
+                <tr>
+                    <th>Usuario</th>
+                    <th>Edad</th>
+                    <th>Peso</th>
+                    <th>Altura</th>
+                    <th>Contextura</th>
+                    <th>Actividad</th>
+                    <th>Objetivo</th>
+                    <th>Coincidencias</th>
+                    <th>Cambio peso</th>
+                </tr>
+
+                {% for usuario in usuarios_similares %}
+                <tr>
+                    <td>{{ usuario.username }}</td>
+                    <td>{{ usuario.edad }}</td>
+                    <td>{{ usuario.peso }} kg</td>
+                    <td>{{ usuario.altura }} cm</td>
+                    <td>{{ usuario.contextura }}</td>
+                    <td>{{ usuario.nivel_actividad }}</td>
+                    <td>{{ usuario.objetivo }}</td>
+                    <td>{{ usuario.coincidencias }}</td>
+                    <td>{{ usuario.cambio_peso }} kg</td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+
+        <hr>
+
+        <h3>Casos exitosos</h3>
+
+        {% if casos_exitosos|length == 0 %}
+            <p>No se encontraron casos exitosos entre los usuarios similares.</p>
+        {% else %}
+            <ul>
+                {% for caso in casos_exitosos %}
+                    <li>
+                        {{ caso.username }} - Cambio de peso: {{ caso.cambio_peso }} kg
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <hr>
+
+        <h3>Rutinas sugeridas según tu objetivo</h3>
+
+        {% if rutinas_recomendadas|length == 0 %}
+            <p>No existen rutinas registradas para tu objetivo.</p>
+        {% else %}
+            <ul>
+                {% for rutina in rutinas_recomendadas %}
+                    <li>
+                        <strong>{{ rutina.nombre }}</strong> -
+                        {{ rutina.nivel }} -
+                        {{ rutina.descripcion }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <hr>
+
+        <h3>Comidas utilizadas por usuarios exitosos</h3>
+
+        {% if comidas_recomendadas|length == 0 %}
+            <p>No hay comidas registradas de usuarios exitosos.</p>
+        {% else %}
+            <table border="1" cellpadding="8">
+                <tr>
+                    <th>Comida</th>
+                    <th>Tipo</th>
+                    <th>Calorías</th>
+                    <th>Cantidad</th>
+                    <th>Calorías totales</th>
+                </tr>
+
+                {% for comida in comidas_recomendadas %}
+                <tr>
+                    <td>{{ comida.nombre }}</td>
+                    <td>{{ comida.tipo }}</td>
+                    <td>{{ comida.calorias }}</td>
+                    <td>{{ comida.cantidad }}</td>
+                    <td>{{ comida.calorias_totales }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+
+        <hr>
+
+        <h3>Conclusión del análisis</h3>
+
+        {% if total_exitosos > 0 %}
+            <p>
+                Se encontraron usuarios con características similares que obtuvieron resultados positivos.
+                El sistema sugiere revisar las rutinas y comidas utilizadas por estos usuarios para apoyar tu objetivo de
+                <strong>{{ perfil_actual.objetivo }}</strong>.
+            </p>
+        {% else %}
+            <p>
+                No se encontraron suficientes casos exitosos similares. Se recomienda seguir registrando progreso y alimentación
+                para mejorar el análisis.
+            </p>
+        {% endif %}
+
+    {% endif %}
+
+</body>
+</html>

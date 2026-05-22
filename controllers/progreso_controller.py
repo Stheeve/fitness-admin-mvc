@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session
 from models.progreso_model import (obtener_progresos_por_usuario, crear_progreso, eliminar_progreso)
+from controllers.security import usuario_required
 
 progreso_bp = Blueprint("progreso", __name__)
 
@@ -23,8 +24,9 @@ def validar_progreso(peso_actual, porcentaje_grasa):
 
 @progreso_bp.route("/progresos")
 def listar_progresos():
-    if not login_required():
-        return redirect(url_for("auth.login"))
+    proteccion = usuario_required()
+    if proteccion:
+        return proteccion
 
     usuario_id = session["usuario_id"]
     progresos = obtener_progresos_por_usuario(usuario_id)
@@ -34,8 +36,9 @@ def listar_progresos():
 
 @progreso_bp.route("/progresos/crear", methods=["GET", "POST"])
 def crear():
-    if not login_required():
-        return redirect(url_for("auth.login"))
+    proteccion = usuario_required()
+    if proteccion:
+        return proteccion
 
     if request.method == "POST":
         fecha = request.form["fecha"]
@@ -70,8 +73,9 @@ def crear():
 
 @progreso_bp.route("/progresos/eliminar/<int:id>")
 def eliminar(id):
-    if not login_required():
-        return redirect(url_for("auth.login"))
+    proteccion = usuario_required()
+    if proteccion:
+        return proteccion
 
     eliminar_progreso(id, session["usuario_id"])
     return redirect(url_for("progreso.listar_progresos"))

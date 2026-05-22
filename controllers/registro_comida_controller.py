@@ -16,8 +16,9 @@ def login_required():
 
 @registro_comida_bp.route("/mis-comidas")
 def listar():
-    if not login_required():
-        return redirect(url_for("auth.login"))
+    proteccion = usuario_required()
+    if proteccion:
+        return proteccion
 
     registros = obtener_registros_comida(session["usuario_id"])
     return render_template("mis_comidas.html", registros=registros)
@@ -25,8 +26,9 @@ def listar():
 
 @registro_comida_bp.route("/mis-comidas/crear", methods=["GET", "POST"])
 def crear():
-    if not login_required():
-        return redirect(url_for("auth.login"))
+    proteccion = usuario_required()
+    if proteccion:
+        return proteccion
 
     comidas = obtener_comidas()
 
@@ -83,8 +85,9 @@ def crear():
 
 @registro_comida_bp.route("/mis-comidas/eliminar/<int:id>")
 def eliminar(id):
-    if not login_required():
-        return redirect(url_for("auth.login"))
+    proteccion = usuario_required()
+    if proteccion:
+        return proteccion
 
     eliminar_registro_comida(id, session["usuario_id"])
     return redirect(url_for("registro_comida.listar"))
