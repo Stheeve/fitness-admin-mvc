@@ -1,5 +1,7 @@
-from flask import Blueprint, render_template, redirect, url_for, session
+from flask import Blueprint, render_template, session
 from controllers.security import usuario_required
+from datetime import date
+
 from models.analisis_model import (
     obtener_perfil_usuario,
     obtener_otros_perfiles,
@@ -7,6 +9,12 @@ from models.analisis_model import (
     obtener_comidas_usuario,
     obtener_rutinas_por_objetivo
 )
+
+from models.recomendacion_model import (
+    obtener_recomendacion_activa,
+    guardar_recomendacion
+)
+
 
 analisis_bp = Blueprint("analisis", __name__)
 
@@ -70,9 +78,27 @@ def ver_analisis():
     usuarios_similares = []
     casos_exitosos = []
     comidas_recomendadas = []
+
+    # Rutinas sugeridas según el objetivo del usuario
     rutinas_recomendadas = obtener_rutinas_por_objetivo(perfil_actual["objetivo"])
 
-    # CORE PRINCIPAL: recorrer usuarios y comparar perfiles
+    # Buscar si el usuario ya tiene una recomendación activa
+    recomendacion_activa = obtener_recomendacion_activa(usuario_id)
+
+    # Si no tiene recomendación activa, se guarda una automáticamente
+    if rutinas_recomendadas and not recomendacion_activa:
+        rutina_sugerida = rutinas_recomendadas[0]
+
+        guardar_recomendacion(
+            usuario_id,
+            rutina_sugerida["id"],
+            date.today(),
+            "Recomendación generada automáticamente según el análisis de usuarios similares."
+        )
+
+        recomendacion_activa = obtener_recomendacion_activa(usuario_id)
+
+    # FOREACH 1: recorrer todos los perfiles registrados y comparar con el usuario actual
     for perfil in otros_perfiles:
         coincidencias = 0
 
@@ -94,7 +120,7 @@ def ver_analisis():
         if abs(perfil["altura"] - perfil_actual["altura"]) <= 10:
             coincidencias += 1
 
-        # Se considera similar si cumple varias características
+        # Se considera similar si cumple al menos 4 coincidencias
         if coincidencias >= 4:
             progresos = obtener_progresos_usuario(perfil["usuario_id"])
             cambio_peso = calcular_cambio_peso(progresos)
@@ -114,13 +140,13 @@ def ver_analisis():
 
             usuarios_similares.append(usuario_similar)
 
-            # Segundo foreach: evaluar si el usuario similar fue exitoso
+            # FOREACH 2: evaluar si el usuario similar fue un caso exitoso
             if evaluar_exito(perfil_actual["objetivo"], progresos):
                 casos_exitosos.append(usuario_similar)
 
                 comidas = obtener_comidas_usuario(perfil["usuario_id"])
 
-                # Tercer foreach: recopilar comidas usadas por casos exitosos
+                # FOREACH 3: recopilar comidas usadas por usuarios exitosos
                 for comida in comidas:
                     comidas_recomendadas.append(comida)
 
@@ -129,6 +155,7 @@ def ver_analisis():
 
     promedio_cambio = 0
 
+    # FOREACH 4: calcular promedio de cambio de peso en casos exitosos
     if total_exitosos > 0:
         suma_cambios = 0
 
@@ -144,6 +171,7 @@ def ver_analisis():
         casos_exitosos=casos_exitosos,
         comidas_recomendadas=comidas_recomendadas,
         rutinas_recomendadas=rutinas_recomendadas,
+        recomendacion_activa=recomendacion_activa,
         total_similares=total_similares,
         total_exitosos=total_exitosos,
         promedio_cambio=promedio_cambio

@@ -1,0 +1,72 @@
+from config.db import get_db
+
+
+def obtener_recomendacion_activa(usuario_id):
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute(
+        """
+        SELECT 
+            ru.id,
+            ru.usuario_id,
+            ru.rutina_id,
+            ru.fecha_recomendacion,
+            ru.estado,
+            ru.resultado,
+            ru.observacion,
+            r.nombre AS rutina_nombre,
+            r.descripcion AS rutina_descripcion,
+            r.nivel,
+            r.objetivo
+        FROM recomendacion_usuario ru
+        LEFT JOIN rutinas r ON ru.rutina_id = r.id
+        WHERE ru.usuario_id = %s AND ru.estado = 'activa'
+        ORDER BY ru.fecha_recomendacion DESC
+        LIMIT 1
+        """,
+        (usuario_id,)
+    )
+
+    recomendacion = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+
+    return recomendacion
+
+
+def desactivar_recomendaciones(usuario_id):
+    conn = get_db()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        UPDATE recomendacion_usuario
+        SET estado = 'finalizada'
+        WHERE usuario_id = %s AND estado = 'activa'
+        """,
+        (usuario_id,)
+    )
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+
+def guardar_recomendacion(usuario_id, rutina_id, fecha_recomendacion, observacion):
+    conn = get_db()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        INSERT INTO recomendacion_usuario 
+        (usuario_id, rutina_id, fecha_recomendacion, estado, resultado, observacion)
+        VALUES (%s, %s, %s, 'activa', NULL, %s)
+        """,
+        (usuario_id, rutina_id, fecha_recomendacion, observacion)
+    )
+
+    conn.commit()
+    cursor.close()
+    conn.close()

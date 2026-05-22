@@ -37,6 +37,21 @@
 
         <hr>
 
+        <h3>Recomendación activa para el usuario</h3>
+
+        {% if recomendacion_activa %}
+            <p><strong>Rutina recomendada:</strong> {{ recomendacion_activa.rutina_nombre }}</p>
+            <p><strong>Nivel:</strong> {{ recomendacion_activa.nivel }}</p>
+            <p><strong>Objetivo:</strong> {{ recomendacion_activa.objetivo }}</p>
+            <p><strong>Fecha de recomendación:</strong> {{ recomendacion_activa.fecha_recomendacion }}</p>
+            <p><strong>Estado:</strong> {{ recomendacion_activa.estado }}</p>
+            <p><strong>Observación:</strong> {{ recomendacion_activa.observacion }}</p>
+        {% else %}
+            <p>No existe una recomendación activa.</p>
+        {% endif %}
+
+        <hr>
+
         <h3>Usuarios similares</h3>
 
         {% if usuarios_similares|length == 0 %}
