@@ -70,3 +70,21 @@ def guardar_recomendacion(usuario_id, rutina_id, fecha_recomendacion, observacio
     conn.commit()
     cursor.close()
     conn.close()
+    
+    
+def actualizar_resultado_recomendacion(recomendacion_id, resultado, observacion):
+    conn = get_db()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        UPDATE recomendacion_usuario
+        SET resultado = %s, observacion = %s
+        WHERE id = %s
+        """,
+        (resultado, observacion, recomendacion_id)
+    )
+
+    conn.commit()
+    cursor.close()
+    conn.close()

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Evaluación de recomendación</title>
+</head>
+<body>
+
+    <h2>Evaluación de Recomendación</h2>
+
+    <a href="{{ url_for('dashboard') }}">Volver al dashboard</a> |
+    <a href="{{ url_for('analisis.ver_analisis') }}">Volver al análisis</a> |
+    <a href="{{ url_for('auth.logout') }}">Cerrar sesión</a>
+
+    <hr>
+
+    {% if error %}
+        <p style="color:red;">{{ error }}</p>
+    {% else %}
+
+        <h3>Recomendación activa</h3>
+
+        <p><strong>Rutina:</strong> {{ recomendacion.rutina_nombre }}</p>
+        <p><strong>Objetivo:</strong> {{ recomendacion.objetivo }}</p>
+        <p><strong>Fecha de recomendación:</strong> {{ recomendacion.fecha_recomendacion }}</p>
+        <p><strong>Estado:</strong> {{ recomendacion.estado }}</p>
+
+        <hr>
+
+        <h3>Evaluación del progreso</h3>
+
+        {% if evaluacion.resultado == "pendiente" %}
+            <p style="color:orange;">
+                {{ evaluacion.mensaje }}
+            </p>
+        {% else %}
+
+            <p><strong>Peso inicial:</strong> {{ evaluacion.peso_inicial }} kg</p>
+            <p><strong>Peso final:</strong> {{ evaluacion.peso_final }} kg</p>
+
+            <p><strong>Grasa inicial:</strong> {{ evaluacion.grasa_inicial }}%</p>
+            <p><strong>Grasa final:</strong> {{ evaluacion.grasa_final }}%</p>
+
+            <p><strong>Resultado:</strong> {{ evaluacion.resultado }}</p>
+
+            {% if evaluacion.resultado == "funciono" %}
+                <p style="color:green;">
+                    {{ evaluacion.mensaje }}
+                </p>
+            {% else %}
+                <p style="color:red;">
+                    {{ evaluacion.mensaje }}
+                </p>
+
+                <p>
+                    Puedes volver a ejecutar el análisis para generar una nueva recomendación basada en otros usuarios similares.
+                </p>
+
+                <a href="{{ url_for('analisis.ver_analisis') }}">
+                    Ejecutar nuevo análisis
+                </a>
+            {% endif %}
+
+        {% endif %}
+
+        <hr>
+
+        <h3>Historial de progreso usado para la evaluación</h3>
+
+        {% if progresos|length == 0 %}
+            <p>No existen progresos registrados.</p>
+        {% else %}
+            <table border="1" cellpadding="8">
+                <tr>
+                    <th>Fecha</th>
+                    <th>Peso actual</th>
+                    <th>% Grasa</th>
+                    <th>Observación</th>
+                </tr>
+
+                {% for progreso in progresos %}
+                <tr>
+                    <td>{{ progreso.fecha }}</td>
+                    <td>{{ progreso.peso_actual }} kg</td>
+                    <td>{{ progreso.porcentaje_grasa }}%</td>
+                    <td>{{ progreso.observacion }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+
+    {% endif %}
+
+</body>
+</html>
