@@ -2,8 +2,10 @@ from flask import Blueprint, render_template, redirect, url_for, session
 from controllers.security import usuario_required
 
 from models.recomendacion_model import (
+    desactivar_recomendaciones,
     obtener_recomendacion_activa,
     actualizar_resultado_recomendacion
+    
 )
 
 from models.analisis_model import (
@@ -95,11 +97,10 @@ def evaluar_recomendacion():
     evaluacion = evaluar_si_funciono(perfil["objetivo"], progresos)
 
     if evaluacion["resultado"] != "pendiente":
-        actualizar_resultado_recomendacion(
-            recomendacion["id"],
-            evaluacion["resultado"],
-            evaluacion["mensaje"]
-        )
+        actualizar_resultado_recomendacion(recomendacion["id"],evaluacion["resultado"],evaluacion["mensaje"])
+        
+        if evaluacion["resultado"] == "no funciono":
+            desactivar_recomendaciones(usuario_id)
 
     return render_template(
         "evaluacion_recomendacion.html",

@@ -98,10 +98,11 @@ def ver_analisis():
 
         recomendacion_activa = obtener_recomendacion_activa(usuario_id)
 
-    # FOREACH 1: recorrer todos los perfiles registrados y comparar con el usuario actual
+    #recorrer todos los perfiles registrados
     for perfil in otros_perfiles:
         coincidencias = 0
 
+        # Comparar características del usuario actual con cada perfil
         if perfil["objetivo"] == perfil_actual["objetivo"]:
             coincidencias += 1
 
@@ -120,10 +121,29 @@ def ver_analisis():
         if abs(perfil["altura"] - perfil_actual["altura"]) <= 10:
             coincidencias += 1
 
-        # Se considera similar si cumple al menos 4 coincidencias
+        # Si tiene suficientes coincidencias, se considera usuario similar
         if coincidencias >= 4:
             progresos = obtener_progresos_usuario(perfil["usuario_id"])
-            cambio_peso = calcular_cambio_peso(progresos)
+
+            peso_inicial = None
+            peso_final = None
+            grasa_inicial = None
+            grasa_final = None
+
+            
+            # Por cada usuario similar, recorrer su historial de progreso
+            for indice, progreso in enumerate(progresos):
+                if indice == 0:
+                    peso_inicial = progreso["peso_actual"]
+                    grasa_inicial = progreso["porcentaje_grasa"]
+
+                peso_final = progreso["peso_actual"]
+                grasa_final = progreso["porcentaje_grasa"]
+
+            cambio_peso = 0
+
+            if peso_inicial is not None and peso_final is not None:
+                cambio_peso = round(peso_final - peso_inicial, 2)
 
             usuario_similar = {
                 "usuario_id": perfil["usuario_id"],
@@ -140,15 +160,39 @@ def ver_analisis():
 
             usuarios_similares.append(usuario_similar)
 
-            # FOREACH 2: evaluar si el usuario similar fue un caso exitoso
-            if evaluar_exito(perfil_actual["objetivo"], progresos):
+            usuario_exitoso = False
+
+            if len(progresos) >= 2:
+                if perfil_actual["objetivo"] == "Ganar masa muscular":
+                    usuario_exitoso = peso_final > peso_inicial and grasa_final <= grasa_inicial
+
+                elif perfil_actual["objetivo"] == "Perder peso":
+                    usuario_exitoso = peso_final < peso_inicial and grasa_final < grasa_inicial
+
+                elif perfil_actual["objetivo"] == "Mejorar resistencia":
+                    usuario_exitoso = grasa_final <= grasa_inicial
+
+                elif perfil_actual["objetivo"] == "Mantener condición física":
+                    usuario_exitoso = abs(peso_final - peso_inicial) <= 2
+
+            if usuario_exitoso:
                 casos_exitosos.append(usuario_similar)
 
                 comidas = obtener_comidas_usuario(perfil["usuario_id"])
 
-                # FOREACH 3: recopilar comidas usadas por usuarios exitosos
+              
+                # Por cada usuario exitoso, recorrer sus comidas consumidas
                 for comida in comidas:
-                    comidas_recomendadas.append(comida)
+                    comida_recomendada = {
+                        "nombre": comida["nombre"],
+                        "tipo": comida["tipo"],
+                        "calorias": comida["calorias"],
+                        "cantidad": comida["cantidad"],
+                        "calorias_totales": comida["calorias_totales"],
+                        "usuario_origen": perfil["username"]
+                    }
+
+                    comidas_recomendadas.append(comida_recomendada)
 
     total_similares = len(usuarios_similares)
     total_exitosos = len(casos_exitosos)
