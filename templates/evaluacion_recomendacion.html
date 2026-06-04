@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Evaluación de recomendación</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+    <div class="container">
 
     <h2>Evaluación de Recomendación</h2>
 
@@ -57,7 +59,7 @@
                 </p>
 
                 <a href="{{ url_for('analisis.ver_analisis') }}">
-                    Ejecutar nuevo análisis
+                    Generar nueva recomendación
                 </a>
             {% endif %}
 
@@ -90,6 +92,7 @@
         {% endif %}
 
     {% endif %}
+    </div>
 
 </body>
 </html>

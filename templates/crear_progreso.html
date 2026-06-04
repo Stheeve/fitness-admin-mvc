@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Registrar progreso</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+    <div class="container">
 
     <h2>Registrar Progreso</h2>
 
@@ -36,6 +38,6 @@
 
     <br>
     <a href="{{ url_for('progreso.listar_progresos') }}">Volver</a>
-
+    </div>
 </body>
 </html>

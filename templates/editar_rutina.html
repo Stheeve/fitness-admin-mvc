@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Editar Rutina</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-
+    <div class="container">
     <h2>Editar Rutina</h2>
 
     {% if error %}
@@ -39,6 +40,6 @@
 
     <br>
     <a href="{{ url_for('rutina.listar_rutinas') }}">Volver</a>
-
+    </div>
 </body>
 </html>

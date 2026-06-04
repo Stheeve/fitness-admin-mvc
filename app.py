@@ -9,6 +9,7 @@ from controllers.progreso_controller import progreso_bp
 from controllers.registro_comida_controller import registro_comida_bp
 from controllers.analisis_controller import analisis_bp
 from controllers.evaluacion_controller import evaluacion_bp
+from models.recomendacion_model import obtener_recomendacion_activa, obtener_ejercicios_recomendacion
 
 app = Flask(__name__)
 app.secret_key = "clave_secreta_fitness"
@@ -32,6 +33,9 @@ def dashboard():
     if session.get("rol") == "admin":
         return render_template("dashboard_admin.html")
 
-    return render_template("dashboard_usuario.html")
+
+    recomendacion = obtener_recomendacion_activa(session["usuario_id"])
+    ejercicios_recomendados = obtener_ejercicios_recomendacion(session["usuario_id"])
+    return render_template("dashboard_usuario.html", recomendacion=recomendacion, ejercicios_recomendados=ejercicios_recomendados)
 if __name__ == "__main__":
     app.run(debug=True)

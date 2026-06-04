@@ -11,8 +11,6 @@ from controllers.security import admin_required
 rutina_bp = Blueprint("rutina", __name__)
 
 
-def login_required():
-    return "usuario_id" in session
 
 
 @rutina_bp.route("/rutinas")

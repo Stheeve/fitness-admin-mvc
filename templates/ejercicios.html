@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Ejercicios</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-
+    <div class="container">
     <h2>Administrar Ejercicios</h2>
 
     <a href="{{ url_for('dashboard') }}">Volver al dashboard</a> |
@@ -44,6 +45,6 @@
             {% endfor %}
         </table>
     {% endif %}
-
+    </div>
 </body>
 </html>

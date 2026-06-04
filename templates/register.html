@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Registro - Fitness Admin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h2>Registrar usuario</h2>
+    <div class="container">
+        <h2>Registrar usuario</h2>
 
     {% if error %}
         <p style="color:red;">{{ error }}</p>
@@ -23,5 +25,6 @@
 
     <br>
     <a href="{{ url_for('auth.login') }}">Volver al login</a>
+    </div>
 </body>
 </html>

@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Crear Asignación</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+    <div class="container">
 
     <h2>Crear Asignación Rutina - Ejercicio</h2>
 
@@ -55,6 +57,6 @@
 
     <br>
     <a href="{{ url_for('rutina_ejercicio.listar_asignaciones') }}">Volver</a>
-
+    </div>
 </body>
 </html>

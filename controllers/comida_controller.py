@@ -11,8 +11,6 @@ from controllers.security import admin_required
 comida_bp = Blueprint("comida", __name__)
 
 
-def login_required():
-    return "usuario_id" in session
 
 
 def validar_datos_comida(nombre, calorias, proteinas, carbohidratos, grasas):

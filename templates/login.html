@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Login - Fitness Admin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+    <div class="container">
     <h2>Iniciar sesión</h2>
 
     {% if error %}
@@ -23,5 +25,6 @@
 
     <br>
     <a href="{{ url_for('auth.register') }}">Crear usuario</a>
+    </div>
 </body>
 </html>

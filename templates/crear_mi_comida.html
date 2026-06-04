@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Registrar comida consumida</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
+    <div class="container">
     <h2>Registrar Comida Consumida</h2>
 
     {% if error %}
@@ -39,6 +41,7 @@
 
     <br>
     <a href="{{ url_for('registro_comida.listar') }}">Volver</a>
+    </div>
 
 </body>
 </html>

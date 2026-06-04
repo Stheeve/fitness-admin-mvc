@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Crear Comida</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-
+    <div class="container">
     <h2>Crear Comida</h2>
 
     {% if error %}
@@ -42,6 +43,7 @@
 
     <br>
     <a href="{{ url_for('comida.listar_comidas') }}">Volver</a>
+    </div>
 
 </body>
 </html>

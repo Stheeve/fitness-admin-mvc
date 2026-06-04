@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Análisis de usuarios similares</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+    <div class="container">
 
     <h2>Análisis de Usuarios Similares</h2>
 
@@ -14,7 +16,7 @@
     <hr>
 
     {% if error %}
-        <p style="color:red;">{{ error }}</p>
+        <p class="error">{{ error }}</p>
     {% else %}
 
         <h3>Perfil analizado</h3>
@@ -166,6 +168,8 @@
         {% endif %}
 
     {% endif %}
+
+    </div>
 
 </body>
 </html>

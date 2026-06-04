@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Mis comidas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+    <div class="container">
 
     <h2>Mis Comidas Consumidas</h2>
 
@@ -49,5 +51,6 @@
         </table>
     {% endif %}
 
+    </div>
 </body>
 </html>

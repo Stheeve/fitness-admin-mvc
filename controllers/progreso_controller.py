@@ -5,8 +5,6 @@ from controllers.security import usuario_required
 progreso_bp = Blueprint("progreso", __name__)
 
 
-def login_required():
-    return "usuario_id" in session
 
 
 def validar_progreso(peso_actual, porcentaje_grasa):

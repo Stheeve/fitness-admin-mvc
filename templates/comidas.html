@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Comidas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-
+    <div class="container">
     <h2>Administrar Comidas</h2>
 
     <a href="{{ url_for('dashboard') }}">Volver al dashboard</a> |
@@ -50,6 +51,8 @@
             {% endfor %}
         </table>
     {% endif %}
+
+    </div>
 
 </body>
 </html>

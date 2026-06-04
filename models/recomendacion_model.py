@@ -88,3 +88,33 @@ def actualizar_resultado_recomendacion(recomendacion_id, resultado, observacion)
     conn.commit()
     cursor.close()
     conn.close()
+    
+    
+def obtener_ejercicios_recomendacion(usuario_id):
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute(
+        """
+        SELECT 
+            e.nombre AS ejercicio_nombre,
+            e.tipo,
+            e.calorias,
+            re.series,
+            re.repeticiones
+        FROM recomendacion_usuario ru
+        INNER JOIN rutina_ejercicio re ON ru.rutina_id = re.rutina_id
+        INNER JOIN ejercicios e ON re.ejercicio_id = e.id
+        WHERE ru.usuario_id = %s 
+        AND ru.estado = 'activa'
+        ORDER BY e.nombre
+        """,
+        (usuario_id,)
+    )
+
+    ejercicios = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return ejercicios

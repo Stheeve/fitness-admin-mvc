@@ -3,14 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <title>Panel del Usuario</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-
+    <div class="container">
     <h2>Panel del Usuario</h2>
 
     <p>Bienvenido, {{ session["username"] }}</p>
+        {% if recomendacion %}
+            <div class="success">
+                <h3>Rutina actual recomendada</h3>
 
-    <ul>
+                <p><strong>Rutina:</strong> {{ recomendacion.rutina_nombre }}</p>
+                <p><strong>Objetivo:</strong> {{ recomendacion.objetivo }}</p>
+                <p><strong>Nivel:</strong> {{ recomendacion.nivel }}</p>
+                <p><strong>Estado:</strong> {{ recomendacion.estado }}</p>
+                <p><strong>Resultado:</strong> 
+                    {% if recomendacion.resultado %}
+                        {{ recomendacion.resultado }}
+                    {% else %}
+                        Pendiente de evaluación
+                    {% endif %}
+                </p>
+
+                <h4>Ejercicios que debe realizar</h4>
+
+                {% if ejercicios_recomendados|length == 0 %}
+                    <p>No hay ejercicios asignados a esta rutina.</p>
+                {% else %}
+                    <table>
+                        <tr>
+                            <th>Ejercicio</th>
+                            <th>Tipo</th>
+                            <th>Calorías</th>
+                            <th>Series</th>
+                            <th>Repeticiones</th>
+                        </tr>
+
+                        {% for ejercicio in ejercicios_recomendados %}
+                        <tr>
+                            <td>{{ ejercicio.ejercicio_nombre }}</td>
+                            <td>{{ ejercicio.tipo }}</td>
+                            <td>{{ ejercicio.calorias }}</td>
+                            <td>{{ ejercicio.series }}</td>
+                            <td>{{ ejercicio.repeticiones }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                {% endif %}
+            </div>
+        {% else %}
+            <div class="warning">
+                <p><strong>Aún no tienes una rutina recomendada activa.</strong></p>
+                <p>Primero ejecuta el análisis para que el sistema te sugiera una rutina según tu perfil.</p>
+                <a href="{{ url_for('analisis.ver_analisis') }}">Generar análisis</a>
+            </div>
+        {% endif %}
+
+    <ul class="menu">
         <li><a href="{{ url_for('perfil.perfil') }}">Mi perfil físico</a></li>
         <li><a href="{{ url_for('progreso.listar_progresos') }}">Mi progreso</a></li>
         <li><a href="{{ url_for('registro_comida.listar') }}">Mis comidas consumidas</a></li>
@@ -19,6 +69,6 @@
     </ul>
 
     <a href="{{ url_for('auth.logout') }}">Cerrar sesión</a>
-
+    </div>
 </body>
 </html>

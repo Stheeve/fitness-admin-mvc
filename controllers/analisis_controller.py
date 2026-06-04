@@ -199,7 +199,7 @@ def ver_analisis():
 
     promedio_cambio = 0
 
-    # FOREACH 4: calcular promedio de cambio de peso en casos exitosos
+    #Calcular promedio de cambio de peso en casos exitosos
     if total_exitosos > 0:
         suma_cambios = 0
 
