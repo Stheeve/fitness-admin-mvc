@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session
 from models.progreso_model import (obtener_progresos_por_usuario, crear_progreso, eliminar_progreso)
 from controllers.security import usuario_required
-from models.perfil_model import actualizar_peso_perfil
+
 
 progreso_bp = Blueprint("progreso", __name__)
 
@@ -65,11 +65,7 @@ def crear():
             observacion
         )
 
-        # Actualizar el peso en el perfil del usuario
-        filas = actualizar_peso_perfil(session["usuario_id"], peso_actual)
-        print("Usuario:", session["usuario_id"])
-        print("Peso nuevo:", peso_actual)
-        print("Filas actualizadas en perfil:", filas)
+      
 
         return redirect(url_for("progreso.listar_progresos"))
 
