@@ -53,8 +53,7 @@ def actualizar_perfil(usuario_id, edad, peso, altura, contextura, nivel_activida
     conn.commit()
     cursor.close()
     conn.close()
-    
-    
+        
 def actualizar_peso_perfil(usuario_id, nuevo_peso):
     conn = get_db()
     cursor = conn.cursor()
@@ -68,6 +67,10 @@ def actualizar_peso_perfil(usuario_id, nuevo_peso):
         (nuevo_peso, usuario_id)
     )
 
+    filas_afectadas = cursor.rowcount
+
     conn.commit()
     cursor.close()
     conn.close()
+
+    return filas_afectadas
