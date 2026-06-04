@@ -6,7 +6,7 @@ def get_db():
     return mysql.connector.connect(
         host=os.getenv("MYSQLHOST", "localhost"),
         user=os.getenv("MYSQLUSER", "root"),
-        password=os.getenv("MYSQLPASSWORD", "19810203"),
+        password=os.getenv("MYSQLPASSWORD", ""),
         database=os.getenv("MYSQLDATABASE", "fitness_admin"),
         port=int(os.getenv("MYSQLPORT", 3306))
     )
