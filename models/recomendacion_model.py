@@ -116,5 +116,57 @@ def obtener_ejercicios_recomendacion(usuario_id):
 
     cursor.close()
     conn.close()
-
+    
     return ejercicios
+
+
+def obtener_ultima_recomendacion_no_funciono(usuario_id):
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM recomendacion_usuario
+        WHERE usuario_id = %s
+        AND resultado = 'no funciono'
+        ORDER BY id DESC
+        LIMIT 1
+        """,
+        (usuario_id,)
+    )
+
+    recomendacion = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+
+    return recomendacion
+
+
+def obtener_rutinas_exitosas_usuario(usuario_id):
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute(
+        """
+        SELECT 
+            ru.rutina_id,
+            r.nombre,
+            r.descripcion,
+            r.nivel,
+            r.objetivo
+        FROM recomendacion_usuario ru
+        INNER JOIN rutinas r ON ru.rutina_id = r.id
+        WHERE ru.usuario_id = %s
+        AND ru.resultado = 'funciono'
+        """,
+        (usuario_id,)
+    )
+
+    rutinas = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return rutinas

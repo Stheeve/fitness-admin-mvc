@@ -12,7 +12,9 @@ from models.analisis_model import (
 
 from models.recomendacion_model import (
     obtener_recomendacion_activa,
-    guardar_recomendacion
+    guardar_recomendacion,
+    obtener_ultima_recomendacion_no_funciono,
+    obtener_rutinas_exitosas_usuario
 )
 
 
@@ -79,26 +81,15 @@ def ver_analisis():
     casos_exitosos = []
     comidas_recomendadas = []
 
-    # Rutinas sugeridas según el objetivo del usuario
-    rutinas_recomendadas = obtener_rutinas_por_objetivo(perfil_actual["objetivo"])
+    # Aquí primero se guardan rutinas exitosas de usuarios similares.
+    rutinas_recomendadas = []
 
-    # Buscar si el usuario ya tiene una recomendación activa
+    # Respaldo por si todavía no existen rutinas exitosas guardadas.
+    rutinas_respaldo = obtener_rutinas_por_objetivo(perfil_actual["objetivo"])
+
     recomendacion_activa = obtener_recomendacion_activa(usuario_id)
 
-    # Si no tiene recomendación activa, se guarda una automáticamente
-    if rutinas_recomendadas and not recomendacion_activa:
-        rutina_sugerida = rutinas_recomendadas[0]
-
-        guardar_recomendacion(
-            usuario_id,
-            rutina_sugerida["id"],
-            date.today(),
-            "Recomendación generada automáticamente según el análisis de usuarios similares."
-        )
-
-        recomendacion_activa = obtener_recomendacion_activa(usuario_id)
-
-    #recorrer todos los perfiles registrados
+    # FOREACH 1: recorrer todos los perfiles registrados
     for perfil in otros_perfiles:
         coincidencias = 0
 
@@ -130,8 +121,7 @@ def ver_analisis():
             grasa_inicial = None
             grasa_final = None
 
-            
-            # Por cada usuario similar, recorrer su historial de progreso
+            # FOREACH 2 ANIDADO: recorrer historial de progreso del usuario similar
             for indice, progreso in enumerate(progresos):
                 if indice == 0:
                     peso_inicial = progreso["peso_actual"]
@@ -178,10 +168,16 @@ def ver_analisis():
             if usuario_exitoso:
                 casos_exitosos.append(usuario_similar)
 
+                # Obtener rutinas que sí funcionaron a este usuario similar
+                rutinas_exitosas = obtener_rutinas_exitosas_usuario(perfil["usuario_id"])
+
+                # FOREACH 3 ANIDADO: recorrer rutinas exitosas del usuario similar
+                for rutina in rutinas_exitosas:
+                    rutinas_recomendadas.append(rutina)
+
                 comidas = obtener_comidas_usuario(perfil["usuario_id"])
 
-              
-                # Por cada usuario exitoso, recorrer sus comidas consumidas
+                # FOREACH 4 ANIDADO: recorrer comidas consumidas del usuario exitoso
                 for comida in comidas:
                     comida_recomendada = {
                         "nombre": comida["nombre"],
@@ -194,12 +190,45 @@ def ver_analisis():
 
                     comidas_recomendadas.append(comida_recomendada)
 
+    # Si no hay rutinas exitosas de usuarios similares, usar rutinas por objetivo como respaldo
+    if len(rutinas_recomendadas) == 0:
+        rutinas_recomendadas = rutinas_respaldo
+
+    # Guardar recomendación activa evitando repetir la última que no funcionó
+    if rutinas_recomendadas and not recomendacion_activa:
+        ultima_fallida = obtener_ultima_recomendacion_no_funciono(usuario_id)
+
+        rutina_sugerida = None
+
+        # FOREACH 5: recorrer rutinas recomendadas y evitar repetir la última fallida
+        for rutina in rutinas_recomendadas:
+            rutina_id = rutina.get("id") or rutina.get("rutina_id")
+
+            if not ultima_fallida or rutina_id != ultima_fallida["rutina_id"]:
+                rutina_sugerida = rutina
+                break
+
+        # Si todas coinciden o solo hay una, usar la primera disponible
+        if not rutina_sugerida:
+            rutina_sugerida = rutinas_recomendadas[0]
+
+        rutina_id_final = rutina_sugerida.get("id") or rutina_sugerida.get("rutina_id")
+
+        guardar_recomendacion(
+            usuario_id,
+            rutina_id_final,
+            date.today(),
+            "Recomendación generada según rutinas exitosas de usuarios similares."
+        )
+
+        recomendacion_activa = obtener_recomendacion_activa(usuario_id)
+
     total_similares = len(usuarios_similares)
     total_exitosos = len(casos_exitosos)
 
     promedio_cambio = 0
 
-    #Calcular promedio de cambio de peso en casos exitosos
+    # FOREACH 6: calcular promedio de cambio de peso en casos exitosos
     if total_exitosos > 0:
         suma_cambios = 0
 
