@@ -81,7 +81,7 @@ def ver_analisis():
     casos_exitosos = []
     comidas_recomendadas = []
 
-    # Aquí primero se guardan rutinas exitosas de usuarios similares.
+    # guarda rutinas exitosas de usuarios similares
     rutinas_recomendadas = []
 
     # Respaldo por si todavía no existen rutinas exitosas guardadas.
@@ -89,7 +89,7 @@ def ver_analisis():
 
     recomendacion_activa = obtener_recomendacion_activa(usuario_id)
 
-    # FOREACH 1: recorrer todos los perfiles registrados
+    # recorrer todos los perfiles registrados
     for perfil in otros_perfiles:
         coincidencias = 0
 
@@ -121,7 +121,7 @@ def ver_analisis():
             grasa_inicial = None
             grasa_final = None
 
-            # FOREACH 2 ANIDADO: recorrer historial de progreso del usuario similar
+            # recorrer historial de progreso del usuario similar
             for indice, progreso in enumerate(progresos):
                 if indice == 0:
                     peso_inicial = progreso["peso_actual"]
@@ -171,13 +171,13 @@ def ver_analisis():
                 # Obtener rutinas que sí funcionaron a este usuario similar
                 rutinas_exitosas = obtener_rutinas_exitosas_usuario(perfil["usuario_id"])
 
-                # FOREACH 3 ANIDADO: recorrer rutinas exitosas del usuario similar
+                #  recorrer rutinas exitosas del usuario similar
                 for rutina in rutinas_exitosas:
                     rutinas_recomendadas.append(rutina)
 
                 comidas = obtener_comidas_usuario(perfil["usuario_id"])
 
-                # FOREACH 4 ANIDADO: recorrer comidas consumidas del usuario exitoso
+                #recorrer comidas consumidas del usuario exitoso
                 for comida in comidas:
                     comida_recomendada = {
                         "nombre": comida["nombre"],
@@ -190,7 +190,7 @@ def ver_analisis():
 
                     comidas_recomendadas.append(comida_recomendada)
 
-    # Si no hay rutinas exitosas de usuarios similares, usar rutinas por objetivo como respaldo
+    # Si no hay rutinas exitosas de usuarios similares usar rutinas por objetivo como respaldo
     if len(rutinas_recomendadas) == 0:
         rutinas_recomendadas = rutinas_respaldo
 
@@ -200,7 +200,7 @@ def ver_analisis():
 
         rutina_sugerida = None
 
-        # FOREACH 5: recorrer rutinas recomendadas y evitar repetir la última fallida
+        # recorrer rutinas recomendadas y evitar repetir la última fallida
         for rutina in rutinas_recomendadas:
             rutina_id = rutina.get("id") or rutina.get("rutina_id")
 
@@ -228,7 +228,7 @@ def ver_analisis():
 
     promedio_cambio = 0
 
-    # FOREACH 6: calcular promedio de cambio de peso en casos exitosos
+    # recorrer casos exitosos y calcular promedio de cambio de peso
     if total_exitosos > 0:
         suma_cambios = 0
 

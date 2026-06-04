@@ -53,3 +53,21 @@ def actualizar_perfil(usuario_id, edad, peso, altura, contextura, nivel_activida
     conn.commit()
     cursor.close()
     conn.close()
+    
+    
+def actualizar_peso_perfil(usuario_id, nuevo_peso):
+    conn = get_db()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        UPDATE perfil_usuario
+        SET peso = %s
+        WHERE usuario_id = %s
+        """,
+        (nuevo_peso, usuario_id)
+    )
+
+    conn.commit()
+    cursor.close()
+    conn.close()
