@@ -139,3 +139,62 @@ tr:hover {
 .nav a {
     margin-right: 10px;
 }
+
+.tabla-comidas {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.tabla-comidas th,
+.tabla-comidas td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #d9d9d9;
+    vertical-align: middle;
+}
+
+.tabla-comidas th {
+    text-align: center;
+}
+
+.tabla-comidas td:first-child,
+.tabla-comidas td:nth-child(2) {
+    text-align: left;
+}
+
+.tabla-comidas td:nth-child(3),
+.tabla-comidas td:nth-child(4),
+.tabla-comidas td:nth-child(5),
+.tabla-comidas td:nth-child(6) {
+    text-align: center;
+}
+
+.tabla-comidas th:nth-child(1),
+.tabla-comidas td:nth-child(1) {
+    width: 24%;
+}
+
+.tabla-comidas th:nth-child(2),
+.tabla-comidas td:nth-child(2) {
+    width: 14%;
+}
+
+.tabla-comidas th:nth-child(3),
+.tabla-comidas td:nth-child(3) {
+    width: 16%;
+}
+
+.tabla-comidas th:nth-child(4),
+.tabla-comidas td:nth-child(4) {
+    width: 16%;
+}
+
+.tabla-comidas th:nth-child(5),
+.tabla-comidas td:nth-child(5) {
+    width: 15%;
+}
+
+.tabla-comidas th:nth-child(6),
+.tabla-comidas td:nth-child(6) {
+    width: 15%;
+}

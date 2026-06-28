@@ -26,6 +26,13 @@
                     {% endif %}
                 </p>
 
+             
+                <ul>
+                    {% for comida, cantidad in comidas_mas_consumidas %}
+                        <li>{{ comida }} ({{ cantidad }} veces)</li>
+                    {% endfor %}
+                </ul>
+
                 <h4>Ejercicios que debe realizar</h4>
 
                 {% if ejercicios_recomendados|length == 0 %}

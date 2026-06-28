@@ -28,7 +28,12 @@
         <p><strong>Contextura:</strong> {{ perfil_actual.contextura }}</p>
         <p><strong>Nivel de actividad:</strong> {{ perfil_actual.nivel_actividad }}</p>
         <p><strong>Objetivo:</strong> {{ perfil_actual.objetivo }}</p>
-
+        <p><strong>Comidas más consumidas:</strong></p>
+        <ul>
+            {% for comida, cantidad in comidas_mas_consumidas %}
+                <li>{{ comida }} ({{ cantidad }} veces)</li>
+            {% endfor %}
+        </ul>
         <hr>
 
         <h3>Resultados generales</h3>
@@ -124,30 +129,36 @@
 
         <hr>
 
-        <h3>Comidas utilizadas por usuarios exitosos</h3>
+        <h2>Comidas más consumidas por usuarios exitosos</h2>
 
-        {% if comidas_recomendadas|length == 0 %}
-            <p>No hay comidas registradas de usuarios exitosos.</p>
-        {% else %}
-            <table border="1" cellpadding="8">
+        {% if comidas_recomendadas %}
+        <table class="tabla-comidas">
+            <thead>
                 <tr>
                     <th>Comida</th>
                     <th>Tipo</th>
-                    <th>Calorías</th>
-                    <th>Cantidad</th>
-                    <th>Calorías totales</th>
+                    <th>Calorías por porción</th>
+                    <th>Veces consumida</th>
+                    <th>Cantidad total</th>
+                    <th>Usuarios</th>
                 </tr>
+            </thead>
 
+            <tbody>
                 {% for comida in comidas_recomendadas %}
                 <tr>
                     <td>{{ comida.nombre }}</td>
                     <td>{{ comida.tipo }}</td>
                     <td>{{ comida.calorias }}</td>
-                    <td>{{ comida.cantidad }}</td>
-                    <td>{{ comida.calorias_totales }}</td>
+                    <td>{{ comida.veces_consumida }}</td>
+                    <td>{{ comida.cantidad_total }}</td>
+                    <td>{{ comida.total_usuarios }}</td>
                 </tr>
                 {% endfor %}
-            </table>
+            </tbody>
+        </table>
+        {% else %}
+        <p>No existen comidas registradas por los usuarios exitosos.</p>
         {% endif %}
 
         <hr>
